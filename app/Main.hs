@@ -89,3 +89,25 @@ data PaymentPlan = PaymentPlan
 deriving anyclass instance FromRow PaymentPlan
 deriving anyclass instance ToRow PaymentPlan
 
+withConn = withConnection db
+
+add :: ToRow a => a -> IO ()
+add (Client _ name phones mname mphones bankaccount paymentplan _ _) = withConn $ flip execute_ [sql| |]
+add (Work _ startat endat site client payment _ _) =
+        withConn $ flip execute_ [sql|
+        |]
+add a = print "error"
+
+-- createClient :: 
+--            Text    -- clientName
+--         -> Text    -- clientPhones
+--         -> Text    -- clientManagerName
+--         -> Text    -- clientManagerPhones
+--         -> Text    -- clientBankAccountName
+--         -> Integer -- clientPaymentPlan
+--         -> UTCTime -- clientCreatedAt
+--         -> UTCTime -- clientUpdatedAt
+-- createClient = _
+--
+-- createSite :: Site
+-- createSite = _
