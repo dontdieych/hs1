@@ -4,6 +4,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE StandaloneDeriving #-}
+-- {-# LANGUAGE FlexibleContexts #-}
 
 -- {-# LANGUAGE UndecidableInstances #-}
 -- {-# LANGUAGE DataKinds #-}
@@ -21,50 +22,75 @@ import Database.SQLite.Simple
 import Database.SQLite.Simple.QQ
 import Data.Time.Clock
 
-db = "ildang.db"
-
 main :: IO ()
 main = do
     args <- getArgs
     print args
     print "working ..."
 
+class ToRow a => CRUD a where
+    i :: a -> Query
+    -- d :: a -> IO ()
+    -- u :: a -> IO ()
+    -- s :: a -> IO [r]
+
 data Client = Client
-    { clientId :: Integer
+    { clientId :: Maybe Integer
     , clientName :: Text 
-    , clientPhones :: Text
-    , clientManagerName :: Text
-    , clientManagerPhones :: Text
-    , clientBankAccountName :: Text
-    , clientPaymentPlan :: Integer
-    , clientCreatedAt :: UTCTime
-    , clientUpdatedAt :: UTCTime
-    } deriving (Generic, Show)
+    , clientPhones :: Maybe Text
+    , clientManagerName :: Maybe Text
+    , clientManagerPhones :: Maybe Text
+    , clientBankAccountName :: Maybe Text
+    , clientPaymentPlan :: Maybe Integer
+    , clientCreatedAt :: Maybe UTCTime
+    , clientUpdatedAt :: Maybe UTCTime
+    } deriving (Generic, Show, Eq)
 deriving anyclass instance FromRow Client
 deriving anyclass instance ToRow Client
+
+instance CRUD Client where
+    i (Client _ name phones mname mphones bankaccount paymentplan _ _)
+        =   [sql|
+                insert into clients (
+                    name
+                    , phones
+                    , manager_name
+                    , manager_phones
+                    , bank_account_name
+                    , payment_plan
+                )
+                values
+            |] <> "( " <> (Query $ toS $ intercalate ", "
+            [ show name
+            , maybe "NULL" show phones
+            , maybe "NULL" show mname
+            , maybe "NULL" show mphones
+            , maybe "NULL" show bankaccount
+            , maybe "NULL" show paymentplan
+             ] :: Query) <> " )"
 
 data Work = Work
     { workId :: Integer
     , workStartAt :: UTCTime
     , workEndAt :: UTCTime
-    , workSite :: Integer
-    , workClient :: Integer
-    , workPayment :: Integer
+    , workSite :: Maybe Integer
+    , workClient :: Maybe Integer
+    , workPayment :: Maybe Integer
     , workCreatedAt :: UTCTime
     , workUpdatedAt :: UTCTime
-    } deriving (Generic, Show)
+    } deriving (Generic, Show, Eq)
 deriving anyclass instance FromRow Work
 deriving anyclass instance ToRow Work
 
 data Site = Site
     { siteId :: Integer
     , siteName  :: Text
-    , siteAddress  :: Text
-    , siteLatitude  :: Text
-    , siteLongitude  :: Text
+    , siteAddress  :: Maybe Text
+    , siteLatitude  :: Maybe Text
+    , siteLongitude  :: Maybe Text
     , siteCreatedAt  :: UTCTime
     , siteUpdatedAt  :: UTCTime
-    } deriving (Generic, Show)
+    } deriving (Generic, Show, Eq)
 deriving anyclass instance FromRow Site
 deriving anyclass instance ToRow Site
 
@@ -72,42 +98,27 @@ data Payment = Payment
     { paymentId  :: Integer
     , paymentWork  :: Integer
     , paymentClient  :: Integer
-    , paymentReceivable  :: Integer
-    , paymentTaxRate :: Double
+    , paymentReceivable  :: Maybe Integer
+    , paymentTaxRate :: Maybe Double
     , paymentCreatedAt :: UTCTime
     , paymentUpdatedAt :: UTCTime
-    } deriving (Generic, Show)
+    } deriving (Generic, Show, Eq)
 deriving anyclass instance FromRow Payment
 deriving anyclass instance ToRow Payment
 
 data PaymentPlan = PaymentPlan
     { paymentPlanId  :: Integer
-    , paymentPlanPlan  :: Text
+    , paymentPlanPlan  :: Maybe Text
     , paymentPlanCreatedAt :: UTCTime
     , paymentPlanUpdatedAt :: UTCTime
-    } deriving (Generic, Show)
+    } deriving (Generic, Show, Eq)
 deriving anyclass instance FromRow PaymentPlan
 deriving anyclass instance ToRow PaymentPlan
 
-withConn = withConnection db
+dbFile = "ildang.db"
 
-add :: ToRow a => a -> IO ()
-add (Client _ name phones mname mphones bankaccount paymentplan _ _) = withConn $ flip execute_ [sql| |]
-add (Work _ startat endat site client payment _ _) =
-        withConn $ flip execute_ [sql|
-        |]
-add a = print "error"
+withConn = withConnection dbFile
 
--- createClient :: 
---            Text    -- clientName
---         -> Text    -- clientPhones
---         -> Text    -- clientManagerName
---         -> Text    -- clientManagerPhones
---         -> Text    -- clientBankAccountName
---         -> Integer -- clientPaymentPlan
---         -> UTCTime -- clientCreatedAt
---         -> UTCTime -- clientUpdatedAt
--- createClient = _
---
--- createSite :: Site
--- createSite = _
+ins :: CRUD r => [r] -> IO ()
+ins rows = withConn $ \conn -> execute_ conn $ mconcat $ fmap i rows
+

@@ -1,0 +1,2 @@
+constraints:
+    Cabal == 3.6.3.0
