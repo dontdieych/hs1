@@ -1,0 +1,10 @@
+{
+  "connections": [
+    {
+      "name": "sqlite3-project",
+      "adapter": "sqlite3",
+      "filename": "/home/alarm/hs1/app/checkout.db",
+      "projectPaths": ["/home/alarm/hs1/app/"]
+    }
+  ]
+}
