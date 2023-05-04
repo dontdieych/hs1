@@ -1,0 +1,54 @@
+Cabal:350:failed to parse: typeRep :: forall {k} proxy (a :: k). Typeable a => proxy a -> TypeRep
+Cabal:1862:failed to parse: seq :: forall {r :: RuntimeRep} a (b :: TYPE r). a -> b -> b
+Cabal:4530:failed to parse: typeRep :: forall {k} proxy (a :: k). Typeable a => proxy a -> TypeRep
+Cabal:12591:failed to parse:     type Key a;
+Cabal:12592:failed to parse: }
+base:274:failed to parse: type HasCallStack = (?callStack :: CallStack)
+base:6840:failed to parse:     -- | Generic representation type
+base:6841:failed to parse:     type Rep a :: Type -> Type;
+base:6842:failed to parse: }
+base:6862:failed to parse:     -- | Generic representation type
+base:6863:failed to parse:     type Rep1 f :: k -> Type;
+base:6864:failed to parse: }
+base:9152:failed to parse: class a ~# b => (a :: k0) ~~ (b :: k1)
+base:9203:failed to parse: instance forall k1 k2 (a :: k1) (b :: k2). (a GHC.Types.~~ b) => GHC.Read.Read (a Data.Type.Equality.:~~: b)
+base:9204:failed to parse: instance forall k1 k2 (a :: k1) (b :: k2). (a GHC.Types.~~ b) => GHC.Enum.Bounded (a Data.Type.Equality.:~~: b)
+base:9207:failed to parse: instance forall k1 k2 (a :: k1) (b :: k2). (a GHC.Types.~~ b) => GHC.Enum.Enum (a Data.Type.Equality.:~~: b)
+base:12008:failed to parse: coerce :: forall {k :: RuntimeRep} (a :: TYPE k) (b :: TYPE k). Coercible a b => a -> b
+base:26769:failed to parse: type HasCallStack = (?callStack :: CallStack)
+base:29802:failed to parse: seq :: forall {r :: RuntimeRep} a (b :: TYPE r). a -> b -> b
+base:36689:failed to parse: instance forall i j (a :: i) (b :: j). (Data.Typeable.Internal.Typeable i, Data.Typeable.Internal.Typeable j, Data.Typeable.Internal.Typeable a, Data.Typeable.Internal.Typeable b, a GHC.Types.~~ b) => Data.Data.Data (a Data.Type.Equality.:~~: b)
+base:36874:failed to parse: seq :: forall {r :: RuntimeRep} a (b :: TYPE r). a -> b -> b
+base:36889:failed to parse: leftSection :: forall {q :: RuntimeRep} {r :: RuntimeRep} {n :: Multiplicity} (a :: TYPE q) (b :: TYPE r). (a %n -> b) -> a %n -> b
+base:36890:failed to parse: rightSection :: forall {q :: RuntimeRep} {r :: RuntimeRep} {s :: RuntimeRep} {n :: Multiplicity} {o :: Multiplicity} (a :: TYPE q) (b :: TYPE r) (c :: TYPE s). (a %n -> b %o -> c) -> b %o -> a %n -> c
+base:36901:failed to parse: proxy# :: forall {k} (a :: k). Proxy# a
+base:36997:failed to parse: data State# a :: TYPE 'TupleRep '[] :: [RuntimeRep]
+base:37023:failed to parse: data Proxy# (a :: k) :: TYPE 'TupleRep '[] :: [RuntimeRep]
+base:43096:failed to parse: oneShot :: forall {q :: RuntimeRep} {r :: RuntimeRep} (a :: TYPE q) (b :: TYPE r). (a -> b) -> a -> b
+base:43155:failed to parse: coerce :: forall {k :: RuntimeRep} (a :: TYPE k) (b :: TYPE k). Coercible a b => a -> b
+base:43231:failed to parse: class a ~# b => (a :: k0) ~~ (b :: k1)
+base:43419:failed to parse:     -- | The <a>Item</a> type function returns the type of items of the
+base:43420:failed to parse:     --   structure <tt>l</tt>.
+base:43421:failed to parse:     type Item l;
+base:43422:failed to parse: }
+ghc:173:failed to parse: seq :: forall {r :: RuntimeRep} a (b :: TYPE r). a -> b -> b
+ghc:3995:failed to parse:     type ElemOf set;
+ghc:3996:failed to parse: }
+ghc:4017:failed to parse:     type KeyOf map;
+ghc:4018:failed to parse: }
+ghc:5197:failed to parse: type HasCallStack = ?callStack :: CallStack
+ghc:22216:failed to parse:     type Key m :: Type;
+ghc:22217:failed to parse: }
+ghc:22322:failed to parse:     type Key m :: Type;
+ghc:22323:failed to parse: }
+ghc:42792:failed to parse:     type Key m :: Type;
+ghc:42793:failed to parse: }
+ghc:44679:failed to parse:     -- | See Note [Body in DisambECP]
+ghc:44680:failed to parse:     type Body b :: Type -> Type;
+ghc:44682:failed to parse:     -- | Infix operator representation
+ghc:44683:failed to parse:     type InfixOp b;
+ghc:44685:failed to parse:     -- | Function argument representation
+ghc:44686:failed to parse:     type FunArg b;
+ghc:44687:failed to parse: }
+mtl:1049:failed to parse: mapContT :: forall {k} m (r :: k) a. (m r -> m r) -> ContT r m a -> ContT r m a
+mtl:1058:failed to parse: withContT :: forall {k} b m (r :: k) a. ((b -> m r) -> a -> m r) -> ContT r m a -> ContT r m b

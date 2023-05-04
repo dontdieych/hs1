@@ -2,13 +2,13 @@ DROP TABLE IF EXISTS works;
 
 CREATE TABLE works (
         id INTEGER PRIMARY KEY NOT NULL
-        , start_at TEXT NOT NULL DEFAULT current_timestamp
-        , end_at TEXT NOT NULL DEFAULT current_timestamp
+        , start_at TEXT NOT NULL
+        , end_at TEXT NOT NULL
         , site INTEGER
         , client INTEGER
         , payment INTEGER
-        , created_at TEXT NOT NULL DEFAULT current_timestamp
-        , updated_at TEXT NOT NULL DEFAULT current_timestamp
+        , created_at TEXT NOT NULL
+        , updated_at TEXT NOT NULL
                 CHECK ( created_at <= updated_at )
 
         , FOREIGN KEY(site) REFERENCES sites(id)
@@ -26,8 +26,8 @@ CREATE TABLE clients (
         , manager_phones TEXT
         , bank_account_name TEXT
         , payment_plan INTEGER
-        , created_at TEXT NOT NULL DEFAULT current_timestamp
-        , updated_at TEXT NOT NULL DEFAULT current_timestamp
+        , created_at TEXT NOT NULL
+        , updated_at TEXT NOT NULL
                 CHECK ( created_at <= updated_at )
 
         , FOREIGN KEY(payment_plan) REFERENCES payment_plans(id)
@@ -41,8 +41,8 @@ CREATE TABLE sites (
         , address TEXT
         , latitude TEXT
         , longitude TEXT
-        , created_at TEXT NOT NULL DEFAULT current_timestamp
-        , updated_at TEXT NOT NULL DEFAULT current_timestamp
+        , created_at TEXT NOT NULL
+        , updated_at TEXT NOT NULL
                 CHECK ( created_at <= updated_at )
 ) STRICT ;
 
@@ -54,8 +54,8 @@ CREATE TABLE payments (
         , client INTEGER NOT NULL
         , receivable INTEGER
         , tax_rate REAL
-        , created_at TEXT NOT NULL DEFAULT current_timestamp
-        , updated_at TEXT NOT NULL DEFAULT current_timestamp
+        , created_at TEXT NOT NULL
+        , updated_at TEXT NOT NULL
                 CHECK ( created_at <= updated_at )
 
         , FOREIGN KEY(work) REFERENCES works(id)
@@ -67,7 +67,7 @@ DROP TABLE IF EXISTS payment_plans;
 CREATE TABLE payment_plans (
         id INTEGER PRIMARY KEY NOT NULL
         , plan TEXT NOT NULL
-        , created_at TEXT NOT NULL DEFAULT current_timestamp
-        , updated_at TEXT NOT NULL DEFAULT current_timestamp
+        , created_at TEXT NOT NULL
+        , updated_at TEXT NOT NULL
                 CHECK ( created_at <= updated_at )
 ) STRICT ;
