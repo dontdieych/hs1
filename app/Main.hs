@@ -1,27 +1,14 @@
-{-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE StandaloneDeriving #-}
-
--- {-# LANGUAGE FlexibleContexts #-}
-
--- {-# LANGUAGE UndecidableInstances #-}
--- {-# LANGUAGE DataKinds #-}
--- {-# LANGUAGE FlexibleInstances #-}
--- {-# LANGUAGE TemplateHaskell #-}
--- {-# LANGUAGE MultiParamTypeClasses #-}
--- {-# LANGUAGE TypeFamilies #-}
--- {-# LANGUAGE GADTs #-}
--- {-# LANGUAGE GeneralizedNewtypeDeriving #-}
--- {-# LANGUAGE TypeApplications #-}
--- {-# LANGUAGE ScopedTypeVariables #-}
 
 import Data.Time.Clock
 import Database.SQLite.Simple
 import Database.SQLite.Simple.QQ
 import Protolude
+import Database.SQLite.Simple.FromField (FromField(fromField))
+
+default (Text)
 
 main :: IO ()
 main = do
@@ -70,11 +57,12 @@ instance CRUD Client where
             , updated_at
             )
         values (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        |]
+      |]
       rows
 
-  updateRows [r : rows] =
-    _
+  -- updateRows rows = exeMany
+
+-- updateRows [] = return ()
 
 --     =   [sql|
 --             update clients
@@ -98,63 +86,63 @@ instance CRUD Client where
 --         , maybe "NULL" show updatedat
 --          ] :: Query) <> " )"
 
-data Work = Work
-  { workId :: Integer,
-    workStartAt :: UTCTime,
-    workEndAt :: UTCTime,
-    workSite :: Maybe Integer,
-    workClient :: Maybe Integer,
-    workPayment :: Maybe Integer,
-    workCreatedAt :: UTCTime,
-    workUpdatedAt :: UTCTime
-  }
-  deriving (Generic, Show, Eq)
+-- data Work = Work
+--   { workId :: Integer,
+--     workStartAt :: UTCTime,
+--     workEndAt :: UTCTime,
+--     workSite :: Maybe Integer,
+--     workClient :: Maybe Integer,
+--     workPayment :: Maybe Integer,
+--     workCreatedAt :: UTCTime,
+--     workUpdatedAt :: UTCTime
+--   }
+--   deriving (Generic, Show, Eq)
 
-deriving anyclass instance FromRow Work
+-- deriving anyclass instance FromRow Work
 
-deriving anyclass instance ToRow Work
+-- deriving anyclass instance ToRow Work
 
-data Site = Site
-  { siteId :: Integer,
-    siteName :: Text,
-    siteAddress :: Maybe Text,
-    siteLatitude :: Maybe Text,
-    siteLongitude :: Maybe Text,
-    siteCreatedAt :: UTCTime,
-    siteUpdatedAt :: UTCTime
-  }
-  deriving (Generic, Show, Eq)
+-- data Site = Site
+--   { siteId :: Integer,
+--     siteName :: Text,
+--     siteAddress :: Maybe Text,
+--     siteLatitude :: Maybe Text,
+--     siteLongitude :: Maybe Text,
+--     siteCreatedAt :: UTCTime,
+--     siteUpdatedAt :: UTCTime
+--   }
+--   deriving (Generic, Show, Eq)
 
-deriving anyclass instance FromRow Site
+-- deriving anyclass instance FromRow Site
 
-deriving anyclass instance ToRow Site
+-- deriving anyclass instance ToRow Site
 
-data Payment = Payment
-  { paymentId :: Integer,
-    paymentWork :: Integer,
-    paymentClient :: Integer,
-    paymentReceivable :: Maybe Integer,
-    paymentTaxRate :: Maybe Double,
-    paymentCreatedAt :: UTCTime,
-    paymentUpdatedAt :: UTCTime
-  }
-  deriving (Generic, Show, Eq)
+-- data Payment = Payment
+--   { paymentId :: Integer,
+--     paymentWork :: Integer,
+--     paymentClient :: Integer,
+--     paymentReceivable :: Maybe Integer,
+--     paymentTaxRate :: Maybe Double,
+--     paymentCreatedAt :: UTCTime,
+--     paymentUpdatedAt :: UTCTime
+--   }
+--   deriving (Generic, Show, Eq)
 
-deriving anyclass instance FromRow Payment
+-- deriving anyclass instance FromRow Payment
 
-deriving anyclass instance ToRow Payment
+-- deriving anyclass instance ToRow Payment
 
-data PaymentPlan = PaymentPlan
-  { paymentPlanId :: Integer,
-    paymentPlanPlan :: Maybe Text,
-    paymentPlanCreatedAt :: UTCTime,
-    paymentPlanUpdatedAt :: UTCTime
-  }
-  deriving (Generic, Show, Eq)
+-- data PaymentPlan = PaymentPlan
+--   { paymentPlanId :: Integer,
+--     paymentPlanPlan :: Maybe Text,
+--     paymentPlanCreatedAt :: UTCTime,
+--     paymentPlanUpdatedAt :: UTCTime
+--   }
+--   deriving (Generic, Show, Eq)
 
-deriving anyclass instance FromRow PaymentPlan
+-- deriving anyclass instance FromRow PaymentPlan
 
-deriving anyclass instance ToRow PaymentPlan
+-- deriving anyclass instance ToRow PaymentPlan
 
 dbFile = "ildang.db"
 
@@ -162,6 +150,9 @@ withConn = withConnection dbFile
 
 exe :: ToRow r => Query -> r -> IO ()
 exe q r = withConn $ \conn -> execute conn q r
+
+exeMany :: ToRow r => Query -> [r] -> IO ()
+exeMany q rows = withConn $ \conn -> executeMany conn q rows
 
 exe_ :: Query -> IO ()
 exe_ q = withConn $ \conn -> execute_ conn q

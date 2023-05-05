@@ -38,4 +38,32 @@ executable hs1
     default-language: Haskell2010
     default-extensions:
         NoImplicitPrelude
+        , RecordWildCards
+        , NamedFieldPuns
+        , DeriveTraversable
+        , DeriveFoldable
+        , DeriveFunctor
+        , DeriveGeneric
+        , DeriveAnyClass
+        , DuplicateRecordFields
+        , ExistentialQuantification
+				-- , BangPatterns
+        -- , DeriveGeneric
+        -- , ExtendedDefaultRules
+        , FlexibleContexts
+        , FlexibleInstances
+        -- , FunctionalDependencies
+        -- , GADTs
+        -- , GeneralizedNewtypeDeriving
+        , LambdaCase
+        , MultiParamTypeClasses
+        , MultiWayIf
+        -- , NoMonomorphismRestriction
         , OverloadedStrings
+        -- , PartialTypeSignitures
+        , PatternGuards
+        -- , Safe
+        , ScopedTypeVariables
+        , TupleSections
+        -- , TypeSynonymInstances
+        , ViewPatterns
